@@ -104,16 +104,19 @@ from approval_gate import Evidence, ExecutionContext, Gate, Registry
 
 registry = Registry()
 
+
 @dataclass(frozen=True)
 class IssueRefund:
     order_id: str
     amount_cents: int
     currency: Literal["USD", "EUR"]
 
+
 @registry.action("issue_refund", IssueRefund)
 def run_refund(payload: IssueRefund, context: ExecutionContext) -> dict:
     # Send context.idempotency_key downstream if the target supports one.
     ...
+
 
 agent = Gate("gate.db", registry).agent("refund-bot")
 agent.propose(
